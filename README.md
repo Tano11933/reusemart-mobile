@@ -68,4 +68,5 @@ Anggota tim: Tano11933, paniae.
 ## Catatan
 
 - Ini adalah proyek akademik yang masih dikembangkan. Beberapa alur seperti notifikasi belum diuji menyeluruh.
+- Konfigurasi Firebase (`google-services.json`) tidak disertakan di repo karena berisi API key. Bila fitur notifikasi berbasis Firebase nanti diaktifkan, unduh konfigurasi baru dari Firebase console, simpan di `android/app/`, dan biarkan tetap di luar Git (sudah masuk `.gitignore`).
 - Versi Flutter yang dipakai saat pengembangan: 3.24.1 stable.
