@@ -3,6 +3,7 @@ import '/entity/Pembeli.dart';
 import '/view/LoginPage.dart';
 import 'HistoryTransaksiPembelianPage.dart'; // Pastikan path sesuai
 import 'package:p3l_mob/view/Pembeli/HomePagePembeli.dart';
+import '/theme.dart';
 
 
 class ProfilPembeliPage extends StatefulWidget {
@@ -35,48 +36,37 @@ class _ProfilPembeliPageState extends State<ProfilPembeliPage> {
 
   @override
   Widget build(BuildContext context) {
-    const Color background = Color(0xFFF5E5C7);
-    const Color primary = Color(0xFF17616E);
-    const Color red = Color(0xFFE6392F);
-
     final pembeli = widget.pembeli;
 
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: ReuseColors.background,
       appBar : AppBar(
-        backgroundColor: primary,
+        backgroundColor: ReuseColors.primary,
         elevation: 0,
+        scrolledUnderElevation: 0,
         automaticallyImplyLeading: false,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/white.png', height: 35),
-          ],
-        ),
+        iconTheme: const IconThemeData(color: ReuseColors.surface),
+        title: Image.asset('assets/images/white.png', height: 32),
       ),
       body: SafeArea(
         child: Column(
           children: [
             // Logo/Header
-            
+
             // Judul Profil
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               decoration: const BoxDecoration(
-                color: background,
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+                color: ReuseColors.primarySoft,
+                borderRadius: ReuseColors.borderBottom,
               ),
               child: Center(
                 child: Text(
                   'Profil ${pembeli.namaPembeli}',
-                  style: TextStyle(
-                    color: primary,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  textAlign: TextAlign.center,
+                  style: ReuseText.title.copyWith(fontSize: 20),
                 ),
               ),
             ),
@@ -95,7 +85,7 @@ class _ProfilPembeliPageState extends State<ProfilPembeliPage> {
                     const SizedBox(height: 120),
                     _buildButton(
                         text: 'History Transaksi Pembelian',
-                        backgroundColor: primary,
+                        backgroundColor: ReuseColors.primary,
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -107,10 +97,10 @@ class _ProfilPembeliPageState extends State<ProfilPembeliPage> {
                           );
                         },
                       ),
-                      SizedBox(height: 12), // Jarak antara tombol
+                      const SizedBox(height: 12), // Jarak antara tombol
                     _buildButton(
                       text: 'Logout',
-                      backgroundColor: red,
+                      backgroundColor: ReuseColors.danger,
                       onPressed: () {
                         showDialog(
                           context: context,
@@ -151,9 +141,9 @@ class _ProfilPembeliPageState extends State<ProfilPembeliPage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: primary,
-        selectedItemColor: background,
-        unselectedItemColor: background.withOpacity(0.5),
+        backgroundColor: ReuseColors.surface,
+        selectedItemColor: ReuseColors.primary,
+        unselectedItemColor: ReuseColors.muted,
         currentIndex: _selectedIndex,
         onTap: _onNavTapped,
         items: const [
@@ -171,16 +161,10 @@ class _ProfilPembeliPageState extends State<ProfilPembeliPage> {
       child: TextFormField(
         readOnly: true,
         initialValue: value ?? '-',
-        decoration: InputDecoration(
-          prefixIcon: Icon(icon, color: Color(0xFF173B61)),
+        style: ReuseText.body,
+        decoration: ReuseStyles.field(
           labelText: label,
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.black12),
-          ),
+          prefixIcon: Icon(icon, color: ReuseColors.muted),
         ),
       ),
     );
@@ -197,9 +181,11 @@ class _ProfilPembeliPageState extends State<ProfilPembeliPage> {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
+          foregroundColor: ReuseColors.surface,
+          elevation: 0,
           padding: const EdgeInsets.symmetric(vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+          shape: const RoundedRectangleBorder(
+            borderRadius: ReuseColors.border,
           ),
         ),
         child: Text(text, style: const TextStyle(fontSize: 16, color: Colors.white)),

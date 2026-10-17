@@ -2,34 +2,30 @@ import 'package:flutter/material.dart';
 import '/entity/Barang.dart';
 import '/client/BarangClient.dart';
 import '/config.dart';
+import '/theme.dart';
 
 class DaftarBarangPembeli extends StatelessWidget {
   const DaftarBarangPembeli({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const background = Color(0xFFF5E5C7);
-    const primary = Color(0xFF17616E);
-
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: ReuseColors.background,
       appBar: AppBar(
-        backgroundColor: primary,
+        backgroundColor: ReuseColors.primary,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/white.png', height: 35),
-          ],
-        ),
+        iconTheme: const IconThemeData(color: ReuseColors.surface),
+        title: Image.asset('assets/images/white.png', height: 32),
       ),
       body: FutureBuilder<List<Barang>>(
         future: BarangClient.fetchBarangTersedia(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(color: ReuseColors.primary),
+            );
           } else if (snapshot.hasError) {
             return const Center(child: Text("Gagal memuat barang."));
           }
@@ -50,54 +46,49 @@ class DaftarBarangPembeli extends StatelessWidget {
             ),
             itemBuilder: (context, index) {
               final b = barangList[index];
-              return InkWell(
+              return ReuseCard(
+                padding: EdgeInsets.zero,
                 onTap: () => showDialog(
                   context: context,
                   builder: (context) => _showDetailBarangDialog(context, b),
                 ),
-                borderRadius: BorderRadius.circular(14),
-                child: Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
-                          child: Image.network(
-                            "${AppConfig.baseUrl}/image/${b.fotoBarang}",
-                            fit: BoxFit.cover,
-                            errorBuilder: (c, o, s) => const Icon(Icons.broken_image, size: 40),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: ReuseColors.borderTop,
+                        child: Image.network(
+                          "${AppConfig.baseUrl}/image/${b.fotoBarang}",
+                          fit: BoxFit.cover,
+                          errorBuilder: (c, o, s) => Container(
+                            color: ReuseColors.primarySoft,
+                            child: const Icon(Icons.broken_image,
+                                size: 40, color: ReuseColors.muted),
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              b.namaBarang,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              "Rp ${b.hargaBarang}",
-                              style: const TextStyle(fontSize: 13, color: Colors.black87),
-                            ),
-                          ],
-                        ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            b.namaBarang,
+                            style: ReuseText.cardTitle.copyWith(fontSize: 14),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "Rp ${b.hargaBarang}",
+                            style: ReuseText.price.copyWith(fontSize: 13),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               );
             },
@@ -110,7 +101,8 @@ class DaftarBarangPembeli extends StatelessWidget {
 
   Dialog _showDetailBarangDialog(BuildContext context, Barang barang) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+      backgroundColor: ReuseColors.surface,
+      shape: const RoundedRectangleBorder(borderRadius: ReuseColors.border),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
@@ -119,11 +111,8 @@ class DaftarBarangPembeli extends StatelessWidget {
             children: [
               Text(
                 barang.namaBarang,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF17616E),
-                ),
+                textAlign: TextAlign.center,
+                style: ReuseText.cardTitle.copyWith(fontSize: 20),
               ),
               const SizedBox(height: 12),
               SizedBox(
@@ -131,27 +120,29 @@ class DaftarBarangPembeli extends StatelessWidget {
                 child: PageView(
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: ReuseColors.borderSmall,
                       child: Image.network(
                         '${AppConfig.baseUrl}/image/${barang.fotoBarang}',
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) =>
                             Container(
-                              color: Colors.grey[300],
-                              child: const Icon(Icons.broken_image, size: 80),
+                              color: ReuseColors.primarySoft,
+                              child: const Icon(Icons.broken_image,
+                                  size: 64, color: ReuseColors.muted),
                             ),
                       ),
                     ),
                     if (barang.fotoBarang2 != null && barang.fotoBarang2!.isNotEmpty)
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: ReuseColors.borderSmall,
                         child: Image.network(
                           '${AppConfig.baseUrl}/image/${barang.fotoBarang2}',
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
                               Container(
-                                color: Colors.grey[300],
-                                child: const Icon(Icons.broken_image, size: 80),
+                                color: ReuseColors.primarySoft,
+                                child: const Icon(Icons.broken_image,
+                                    size: 64, color: ReuseColors.muted),
                               ),
                         ),
                       ),
@@ -165,18 +156,15 @@ class DaftarBarangPembeli extends StatelessWidget {
                   child: Text(
                     barang.deskripsiBarang!,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 14),
+                    style: ReuseText.body,
                   ),
                 ),
-              Text("Kategori: ${barang.kategori}"),
-              Text("Harga: Rp ${barang.hargaBarang}"),
-              Text("Status: ${barang.status}"),
-              const SizedBox(height: 10),
+              Text("Kategori: ${barang.kategori}", style: ReuseText.body),
+              Text("Harga: Rp ${barang.hargaBarang}", style: ReuseText.price),
+              Text("Status: ${barang.status}", style: ReuseText.body),
+              const SizedBox(height: 16),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF17616E),
-                  foregroundColor: Colors.white,
-                ),
+                style: ReuseStyles.primaryButton,
                 onPressed: () => Navigator.pop(context),
                 child: const Text("Tutup"),
               )

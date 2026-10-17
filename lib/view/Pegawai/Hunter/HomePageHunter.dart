@@ -8,6 +8,7 @@ import '/client/BarangClient.dart';
 import 'package:p3l_mob/view/Pegawai/Hunter/DetailKomisiPage.dart';
 import 'package:p3l_mob/view/LoginPage.dart';
 import '/config.dart';
+import '/theme.dart';
 
 class HomePageHunter extends StatefulWidget {
   final Pegawai pegawai;
@@ -64,30 +65,28 @@ class _HomePageHunterState extends State<HomePageHunter> {
 
   @override
   Widget build(BuildContext context) {
-    const Color background = Color(0xFFF5E5C7);
-    const Color primary = Color(0xFF17616E);
-    const Color red = Color(0xFFE6392F);
+    const Color red = ReuseColors.danger;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: Color(0xFF17616E),
+        statusBarColor: ReuseColors.primaryDark,
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
-        backgroundColor: background,
+        backgroundColor: ReuseColors.background,
         body: IndexedStack(
           index: _selectedIndex,
           children: [
-            _buildHomeContent(primary),
-            _buildProfileContent(primary, red, background),
+            _buildHomeContent(ReuseColors.primary),
+            _buildProfileContent(ReuseColors.primary, red, ReuseColors.background),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _selectedIndex,
           onTap: _onNavTapped,
-          selectedItemColor: background,
-          unselectedItemColor: background.withOpacity(0.5),
-          backgroundColor: primary,
+          selectedItemColor: ReuseColors.primary,
+          unselectedItemColor: ReuseColors.muted,
+          backgroundColor: ReuseColors.surface,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
@@ -106,17 +105,13 @@ class _HomePageHunterState extends State<HomePageHunter> {
           color: primary,
           padding: const EdgeInsets.symmetric(vertical: 14),
           child: Center(
-            child: Image.asset('assets/images/white.png', height: 50),
+            child: Image.asset('assets/images/white.png', height: 40),
           ),
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 24),
         const Text(
           'Barang Hunter Anda',
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF17616E),
-          ),
+          style: ReuseText.display,
         ),
         const SizedBox(height: 12),
         Expanded(
@@ -124,7 +119,9 @@ class _HomePageHunterState extends State<HomePageHunter> {
             future: barangHunterFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: CircularProgressIndicator(color: ReuseColors.primary),
+                );
               } else if (snapshot.hasError) {
                 return const Center(child: Text("Gagal memuat barang."));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -133,26 +130,37 @@ class _HomePageHunterState extends State<HomePageHunter> {
 
               final barangList = snapshot.data!;
               return ListView.builder(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
                 itemCount: barangList.length,
                 itemBuilder: (context, index) {
                   final barang = barangList[index];
-                  return Card(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    child: ListTile(
-                      onTap: () => showDetailBarangDialog(barang), // <-- Tambahkan ini
-                      leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          '${AppConfig.baseUrl}/image/${barang.fotoBarang}',
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.cover,
-                          errorBuilder: (c, o, s) => const Icon(Icons.broken_image),
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Container(
+                      decoration: ReuseStyles.card(),
+                      child: ListTile(
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: ReuseColors.border),
+                        onTap: () => showDetailBarangDialog(barang), // <-- Tambahkan ini
+                        leading: ClipRRect(
+                          borderRadius: ReuseColors.borderSmall,
+                          child: Image.network(
+                            '${AppConfig.baseUrl}/image/${barang.fotoBarang}',
+                            width: 64,
+                            height: 64,
+                            fit: BoxFit.cover,
+                            errorBuilder: (c, o, s) => const Icon(
+                                Icons.broken_image,
+                                color: ReuseColors.muted),
+                          ),
                         ),
+                        title: Text(barang.namaBarang,
+                            style: ReuseText.cardTitle),
+                        subtitle: Text("Rp ${barang.hargaBarang}",
+                            style: ReuseText.caption),
+                        trailing: const Icon(Icons.chevron_right,
+                            color: ReuseColors.muted),
                       ),
-                      title: Text(barang.namaBarang),
-                      subtitle: Text("Rp ${barang.hargaBarang}"),
                     ),
                   );
                 },
@@ -174,24 +182,21 @@ class _HomePageHunterState extends State<HomePageHunter> {
           color: primary,
           padding: const EdgeInsets.symmetric(vertical: 14),
           child: Center(
-            child: Image.asset('assets/images/white.png', height: 50),
+            child: Image.asset('assets/images/white.png', height: 40),
           ),
         ),
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 40),
+          padding: const EdgeInsets.symmetric(vertical: 24),
           decoration: BoxDecoration(
             color: background,
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+            borderRadius: ReuseColors.borderBottom,
           ),
           child: Center(
             child: Text(
               'Profile ${widget.pegawai.namaPegawai}',
-              style: TextStyle(
-                color: primary,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
+              textAlign: TextAlign.center,
+              style: ReuseText.title.copyWith(fontSize: 24),
             ),
           ),
         ),
@@ -269,16 +274,10 @@ class _HomePageHunterState extends State<HomePageHunter> {
       child: TextFormField(
         readOnly: true,
         initialValue: value ?? '-',
-        decoration: InputDecoration(
-          prefixIcon: Icon(icon, color: Color(0xFF173B61)),
+        style: ReuseText.body,
+        decoration: ReuseStyles.field(
           labelText: label,
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.black12),
-          ),
+          prefixIcon: Icon(icon, color: ReuseColors.muted),
         ),
       ),
     );
@@ -290,16 +289,10 @@ class _HomePageHunterState extends State<HomePageHunter> {
       child: TextField(
         readOnly: true,
         controller: _komisiController,
-        decoration: InputDecoration(
-          prefixIcon: Icon(Icons.attach_money, color: Color(0xFF173B61)),
+        style: ReuseText.body,
+        decoration: ReuseStyles.field(
           labelText: 'Jumlah Komisi',
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.black12),
-          ),
+          prefixIcon: const Icon(Icons.attach_money, color: ReuseColors.muted),
         ),
       ),
     );
@@ -316,9 +309,11 @@ class _HomePageHunterState extends State<HomePageHunter> {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
+          foregroundColor: ReuseColors.surface,
+          elevation: 0,
           padding: const EdgeInsets.symmetric(vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+          shape: const RoundedRectangleBorder(
+            borderRadius: ReuseColors.border,
           ),
         ),
         child: Text(text, style: const TextStyle(fontSize: 16, color: Colors.white)),
@@ -331,7 +326,8 @@ class _HomePageHunterState extends State<HomePageHunter> {
       context: context,
       builder: (context) {
         return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          backgroundColor: ReuseColors.surface,
+          shape: const RoundedRectangleBorder(borderRadius: ReuseColors.border),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: SingleChildScrollView(
@@ -343,7 +339,7 @@ class _HomePageHunterState extends State<HomePageHunter> {
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF17616E),
+                      color: ReuseColors.ink,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -352,27 +348,29 @@ class _HomePageHunterState extends State<HomePageHunter> {
                     child: PageView(
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: ReuseColors.borderSmall,
                           child: Image.network(
                             '${AppConfig.baseUrl}/image/${barang.fotoBarang}',
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
                                 Container(
-                                  color: Colors.grey[300],
-                                  child: const Icon(Icons.broken_image, size: 80),
+                                  color: ReuseColors.primarySoft,
+                                  child: const Icon(Icons.broken_image,
+                                      size: 64, color: ReuseColors.muted),
                                 ),
                           ),
                         ),
                         if (barang.fotoBarang2 != null && barang.fotoBarang2!.isNotEmpty)
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: ReuseColors.borderSmall,
                             child: Image.network(
                               '${AppConfig.baseUrl}/image/${barang.fotoBarang2}',
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) =>
                                   Container(
-                                    color: Colors.grey[300],
-                                    child: const Icon(Icons.broken_image, size: 80),
+                                    color: ReuseColors.primarySoft,
+                                    child: const Icon(Icons.broken_image,
+                                        size: 64, color: ReuseColors.muted),
                                   ),
                             ),
                           ),
@@ -407,10 +405,7 @@ class _HomePageHunterState extends State<HomePageHunter> {
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF17616E),
-                      foregroundColor: Colors.white,
-                    ),
+                    style: ReuseStyles.primaryButton,
                     onPressed: () => Navigator.pop(context),
                     child: const Text("Tutup"),
                   )

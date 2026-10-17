@@ -6,6 +6,7 @@ import '/config.dart';
 import '../Kurir/DetailPengiriman.dart';
 import '../Kurir/ProfileKurirPage.dart';
 import '../Kurir/KurirRiwayatPage.dart';
+import '/theme.dart';
 
 class HomePageKurir extends StatefulWidget {
   final Pegawai pegawai;
@@ -35,9 +36,6 @@ class _HomePageKurirState extends State<HomePageKurir> {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xFF17616E);
-    const backgroundColor = Color(0xFFF5E5C7);
-
     final pages = [
       buildHomePage(widget.pegawai),
       KurirRiwayatPage(pegawai: widget.pegawai),
@@ -45,24 +43,20 @@ class _HomePageKurirState extends State<HomePageKurir> {
     ];
 
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: ReuseColors.background,
       appBar: AppBar(
-        backgroundColor: primaryColor,
+        backgroundColor: ReuseColors.primary,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: true,
         automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/white.png', height: 35),
-          ],
-        ),
+        title: Image.asset('assets/images/white.png', height: 32),
       ),
       body: IndexedStack(index: _selectedIndex, children: pages),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: primaryColor,
-        selectedItemColor: backgroundColor,
-        unselectedItemColor: backgroundColor.withOpacity(0.5),
+        backgroundColor: ReuseColors.surface,
+        selectedItemColor: ReuseColors.primary,
+        unselectedItemColor: ReuseColors.muted,
         currentIndex: _selectedIndex,
         onTap: (index) => setState(() => _selectedIndex = index),
         items: const [
@@ -79,7 +73,9 @@ class _HomePageKurirState extends State<HomePageKurir> {
       future: _pengirimanFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: CircularProgressIndicator(color: ReuseColors.primary),
+          );
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -95,29 +91,20 @@ class _HomePageKurirState extends State<HomePageKurir> {
               children: [
                 const Text(
                   'Welcome Back',
-                  style: TextStyle(
-                    fontFamily: 'Serif',
-                    fontSize: 18,
-                    color: Colors.black54,
-                  ),
+                  style: ReuseText.label,
                 ),
+                const SizedBox(height: 2),
                 Text(
                   pegawai.namaPegawai,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  textAlign: TextAlign.center,
+                  style: ReuseText.title,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 18),
                 const Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Tugas Pengiriman',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF17616E),
-                      fontSize: 16,
-                    ),
+                    style: ReuseText.section,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -141,20 +128,26 @@ class _HomePageKurirState extends State<HomePageKurir> {
                 },
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 16),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: const [
-                      BoxShadow(color: Colors.black12, blurRadius: 6),
-                    ],
-                  ),
+                  padding: const EdgeInsets.all(14),
+                  decoration: ReuseStyles.card(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("ID Pesanan: ${pemesanan.idPemesanan}",
-                          style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          const Icon(Icons.receipt_long,
+                              size: 16, color: ReuseColors.muted),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                                "ID Pesanan: ${pemesanan.idPemesanan}",
+                                style: ReuseText.caption),
+                          ),
+                          const Icon(Icons.chevron_right,
+                              size: 18, color: ReuseColors.muted),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
                       ...detailList.map((barang) {
                         String baseUrl = AppConfig.baseUrl;
                         String fotoPath = barang.fotoBarang.startsWith('/image')
@@ -167,13 +160,15 @@ class _HomePageKurirState extends State<HomePageKurir> {
                           child: Row(
                             children: [
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: ReuseColors.borderSmall,
                                 child: Image.network(
                                   fullImageUrl,
                                   width: 80,
                                   height: 60,
                                   fit: BoxFit.cover,
-                                  errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+                                  errorBuilder: (_, __, ___) => const Icon(
+                                      Icons.broken_image,
+                                      color: ReuseColors.muted),
                                 ),
                               ),
                               const SizedBox(width: 10),
@@ -181,8 +176,11 @@ class _HomePageKurirState extends State<HomePageKurir> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(barang.namaBarang, style: const TextStyle(fontWeight: FontWeight.bold)),
-                                    Text('Harga : Rp ${barang.harga}'),
+                                    Text(barang.namaBarang,
+                                        style: ReuseText.cardTitle),
+                                    const SizedBox(height: 2),
+                                    Text('Harga : Rp ${barang.harga}',
+                                        style: ReuseText.caption),
                                   ],
                                 ),
                               ),

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '/entity/TukarPoin.dart';
 import '/client/MerchandiseClient.dart';
 import '/config.dart';
+import '/theme.dart';
 
 class MerchandiseBlmAmbil extends StatelessWidget {
   final String idPembeli;
@@ -10,28 +11,23 @@ class MerchandiseBlmAmbil extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const background = Color(0xFFF5E5C7);
-    const primary = Color(0xFF17616E);
-
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: ReuseColors.background,
       appBar: AppBar(
-        backgroundColor: primary,
+        backgroundColor: ReuseColors.primary,
         elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/white.png', height: 35),
-          ],
-        ),
+        scrolledUnderElevation: 0,
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: ReuseColors.surface),
+        title: Image.asset('assets/images/white.png', height: 32),
       ),
       body: FutureBuilder<List<TukarPoin>>(
         future: MerchandiseClient.fetchTukarPoinBelumDiambil(idPembeli),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(color: ReuseColors.primary),
+            );
           } else if (snapshot.hasError) {
             return const Center(child: Text("Gagal memuat data."));
           } else if ((snapshot.data ?? []).isEmpty) {
@@ -44,59 +40,60 @@ class MerchandiseBlmAmbil extends StatelessWidget {
             itemCount: list.length,
             itemBuilder: (context, index) {
               final item = list[index];
-              return Card(
-                elevation: 4,
+              return ReuseCard(
                 margin: const EdgeInsets.only(bottom: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          "${AppConfig.baseUrl}/storage/merchandise/${item.gambarMerch}",
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: ReuseColors.borderSmall,
+                      child: Image.network(
+                        "${AppConfig.baseUrl}/storage/merchandise/${item.gambarMerch}",
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => Container(
                           width: 60,
                           height: 60,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Container(
-                            width: 60,
-                            height: 60,
-                            color: Colors.grey[300],
-                            child: const Icon(Icons.broken_image),
+                          color: ReuseColors.primarySoft,
+                          child: const Icon(Icons.broken_image,
+                              color: ReuseColors.muted),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(item.namaMerch,
+                              style: ReuseText.cardTitle.copyWith(fontSize: 16)),
+                          const SizedBox(height: 4),
+                          Text("Jumlah: ${item.jumlah}",
+                              style: ReuseText.caption),
+                          const SizedBox(height: 2),
+                          Text(
+                            "Tanggal Tukar: ${DateFormat('dd-MM-yyyy').format(DateTime.parse(item.tglTukar))}",
+                            style: ReuseText.caption,
                           ),
-                        ),
+                        ],
                       ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(item.namaMerch,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: primary,
-                                )),
-                            const SizedBox(height: 4),
-                            Text("Jumlah: ${item.jumlah}"),
-                            Text("Tanggal Tukar: ${DateFormat('dd-MM-yyyy').format(DateTime.parse(item.tglTukar))}"),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
+                      decoration: ReuseStyles.chip(),
+                      child: Text(
                         item.status,
                         style: const TextStyle(
-                          color: Colors.orange,
+                          color: ReuseColors.ink,
                           fontWeight: FontWeight.w600,
+                          fontSize: 12,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               );
             },

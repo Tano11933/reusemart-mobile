@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '/entity/Pegawai.dart';
 import '/view/LoginPage.dart';
+import '/theme.dart';
 
 class ProfileKurirPage extends StatelessWidget {
   final Pegawai pegawai;
@@ -9,25 +10,25 @@ class ProfileKurirPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const bgColor = Color(0xFFFFEBD0);
-    const primary = Color(0xFF173B61);
-
     InputDecoration inputStyle(IconData icon) {
-      return InputDecoration(
-        prefixIcon: Icon(icon, color: Colors.black),
+      return const InputDecoration(
         filled: true,
-        fillColor: Colors.white,
+        fillColor: ReuseColors.surface,
         enabled: false,
-        contentPadding: const EdgeInsets.symmetric(vertical: 14),
+        contentPadding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderRadius: ReuseColors.borderSmall,
+          borderSide: BorderSide(color: ReuseColors.line),
         ),
-      );
+        disabledBorder: OutlineInputBorder(
+          borderRadius: ReuseColors.borderSmall,
+          borderSide: BorderSide(color: ReuseColors.line),
+        ),
+      ).copyWith(prefixIcon: Icon(icon, color: ReuseColors.muted));
     }
 
     return Container(
-      color: bgColor,
+      color: ReuseColors.background,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       child: SingleChildScrollView(
         child: Column(
@@ -36,7 +37,7 @@ class ProfileKurirPage extends StatelessWidget {
               'Profile Kurir',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: primary,
+                color: ReuseColors.primary,
                 fontSize: 18,
               ),
             ),
@@ -54,7 +55,7 @@ class ProfileKurirPage extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            TextFormField(  
+            TextFormField(
               initialValue: pegawai.tglLahir,
               decoration: inputStyle(Icons.calendar_today),
             ),
@@ -88,10 +89,12 @@ class ProfileKurirPage extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
+                  backgroundColor: ReuseColors.danger,
+                  foregroundColor: ReuseColors.surface,
+                  elevation: 0,
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: ReuseColors.border,
                   ),
                 ),
                 child: const Text('Logout', style: TextStyle(fontSize: 18)),

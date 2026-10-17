@@ -4,6 +4,7 @@ import '/view/LoginPage.dart';
 import 'HistoryBarangTitipanPage.dart';
 import 'HomePagePenitip.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import '/theme.dart';
 
 class ProfilPenitipPage extends StatefulWidget {
   final Penitip penitip;
@@ -51,44 +52,34 @@ class _ProfilPenitipPageState extends State<ProfilPenitipPage> {
 
   @override
   Widget build(BuildContext context) {
-    const Color background = Color(0xFFF5E5C7);
-    const Color primary = Color(0xFF17616E);
-    const Color red = Color(0xFFE6392F);
-
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primary,
+        backgroundColor: ReuseColors.primary,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: true,
         automaticallyImplyLeading: false,
-        title: Column(
-          children: [
-            Image.asset('assets/images/white.png', height: 40),
-            const SizedBox(height: 8),
-          ],
-        ),
+        iconTheme: const IconThemeData(color: ReuseColors.surface),
+        title: Image.asset('assets/images/white.png', height: 32),
       ),
 
-      backgroundColor: background,
+      backgroundColor: ReuseColors.background,
       body: SafeArea(
         child: Column(
           children: [
             // Judul Profil
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               decoration: const BoxDecoration(
-                color: background,
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+                color: ReuseColors.primarySoft,
+                borderRadius: ReuseColors.borderBottom,
               ),
               child: Center(
                 child: Text(
                   'Profil ${widget.penitip.namaPenitip}',
-                  style: TextStyle(
-                    color: primary,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  textAlign: TextAlign.center,
+                  style: ReuseText.title.copyWith(fontSize: 20),
                 ),
               ),
             ),
@@ -111,44 +102,47 @@ class _ProfilPenitipPageState extends State<ProfilPenitipPage> {
                     if ((widget.penitip.totalPenjualanBulanLalu ?? 0) > 0)
                       Padding(
                         padding: const EdgeInsets.only(top: 20, bottom: 4),
-                        child: Card(
-                          color: Colors.amber[50],
-                          elevation: 0,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Rekap Bulan Lalu", style: TextStyle(
-                                    fontWeight: FontWeight.bold, color: Colors.orange[900], fontSize: 16)),
-                                SizedBox(height: 7),
-                                Text("Total penjualan: Rp ${widget.penitip.totalPenjualanBulanLalu ?? 0}",
-                                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
-                                if (widget.penitip.isTopSellerBulanLalu == true) ...[
-                                  SizedBox(height: 5),
-                                  Row(
-                                    children: [
-                                      Icon(Icons.workspace_premium_rounded, color: Colors.amber[800], size: 21),
-                                      SizedBox(width: 7),
-                                      Text("Top Seller bulan lalu",
-                                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber[900])),
-                                    ],
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text("Bonus Top Seller: Rp ${widget.penitip.bonusBulanLalu ?? 0}",
-                                      style: TextStyle(color: Colors.orange[800], fontWeight: FontWeight.bold, fontSize: 14)),
-                                  Text("Total diterima: Rp ${(widget.penitip.totalPenjualanBulanLalu ?? 0) + (widget.penitip.bonusBulanLalu ?? 0)}",
-                                      style: TextStyle(color: Colors.green[700], fontWeight: FontWeight.bold, fontSize: 15)),
-                                ],
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+                          decoration: BoxDecoration(
+                            color: ReuseColors.accentSoft,
+                            borderRadius: ReuseColors.border,
+                            border: Border.all(color: ReuseColors.line),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text("Rekap Bulan Lalu",
+                                  style: ReuseText.section),
+                              const SizedBox(height: 7),
+                              Text("Total penjualan: Rp ${widget.penitip.totalPenjualanBulanLalu ?? 0}",
+                                  style: ReuseText.body.copyWith(fontWeight: FontWeight.w600)),
+                              if (widget.penitip.isTopSellerBulanLalu == true) ...[
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.workspace_premium_rounded,
+                                        color: ReuseColors.primary, size: 21),
+                                    const SizedBox(width: 7),
+                                    Text("Top Seller bulan lalu",
+                                        style: ReuseText.cardTitle),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                Text("Bonus Top Seller: Rp ${widget.penitip.bonusBulanLalu ?? 0}",
+                                    style: ReuseText.body.copyWith(fontWeight: FontWeight.bold)),
+                                Text("Total diterima: Rp ${(widget.penitip.totalPenjualanBulanLalu ?? 0) + (widget.penitip.bonusBulanLalu ?? 0)}",
+                                    style: const TextStyle(color: ReuseColors.success, fontWeight: FontWeight.bold, fontSize: 15)),
                               ],
-                            ),
+                            ],
                           ),
                         ),
                       ),
                     const SizedBox(height: 80),
                     _buildButton(
                       text: 'History Barang Titipan',
-                      backgroundColor: Colors.amber[700]!,
+                      backgroundColor: ReuseColors.primary,
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -161,7 +155,7 @@ class _ProfilPenitipPageState extends State<ProfilPenitipPage> {
                     const SizedBox(height: 12),
                     _buildButton(
                       text: 'Logout',
-                      backgroundColor: red,
+                      backgroundColor: ReuseColors.danger,
                       onPressed: _showLogoutDialog,
                     ),
                   ],
@@ -172,9 +166,9 @@ class _ProfilPenitipPageState extends State<ProfilPenitipPage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: background,
-        selectedItemColor: primary,
-        unselectedItemColor: const Color.fromRGBO(23, 97, 110, 1).withOpacity(0.5),
+        backgroundColor: ReuseColors.surface,
+        selectedItemColor: ReuseColors.primary,
+        unselectedItemColor: ReuseColors.muted,
         currentIndex: _selectedIndex,
         onTap: _onNavTapped,
         items: const [
@@ -192,16 +186,10 @@ class _ProfilPenitipPageState extends State<ProfilPenitipPage> {
       child: TextFormField(
         readOnly: true,
         initialValue: value ?? '-',
-        decoration: InputDecoration(
-          prefixIcon: Icon(icon, color: Color(0xFF173B61)),
+        style: ReuseText.body,
+        decoration: ReuseStyles.field(
           labelText: label,
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.black12),
-          ),
+          prefixIcon: Icon(icon, color: ReuseColors.muted),
         ),
       ),
     );
@@ -218,9 +206,11 @@ class _ProfilPenitipPageState extends State<ProfilPenitipPage> {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
+          foregroundColor: ReuseColors.surface,
+          elevation: 0,
           padding: const EdgeInsets.symmetric(vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+          shape: const RoundedRectangleBorder(
+            borderRadius: ReuseColors.border,
           ),
         ),
         child: Text(text, style: const TextStyle(fontSize: 16, color: Colors.white)),

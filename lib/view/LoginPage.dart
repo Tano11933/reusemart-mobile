@@ -12,6 +12,7 @@ import 'package:p3l_mob/view/Pembeli/HomePagePembeli.dart';
 import 'package:p3l_mob/entity/Pembeli.dart';
 import 'package:p3l_mob/entity/Penitip.dart';
 import 'package:p3l_mob/entity/Pegawai.dart';
+import 'package:p3l_mob/theme.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -178,213 +179,147 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    const darkBlue = Color(0xFF173B61);
-    const lightBlue = Color(0xFF7697A0);
-    const cream = Color(0xFFFFEBD0);
-
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF17616E), Color(0xFF173B61)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
+      backgroundColor: ReuseColors.background,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 460),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: 120,
-                    height: 120,
+                    width: 104,
+                    height: 104,
                     decoration: BoxDecoration(
-                      color: cream,
+                      color: ReuseColors.primarySoft,
                       shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.25),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                      boxShadow: ReuseColors.softShadow,
                     ),
                     child: const Center(
                       child: Icon(
                         Icons.recycling,
-                        size: 80,
-                        color: darkBlue,
+                        size: 60,
+                        color: ReuseColors.primary,
                       ),
                     ),
                   ),
 
                   const SizedBox(height: 24),
 
-                  Text(
+                  const Text(
                     'REUSE MART',
                     style: TextStyle(
-                      color: cream,
-                      fontSize: 34,
+                      color: ReuseColors.primary,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 3,
-                      shadows: [
-                        Shadow(
-                          color: Colors.black.withOpacity(0.5),
-                          offset: const Offset(2, 2),
-                          blurRadius: 4,
-                        ),
-                      ],
                     ),
                   ),
 
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
 
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
                       'A Second Life for Quality Goods, A Better Life for the Planet',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: lightBlue,
-                        fontSize: 16,
-                        fontStyle: FontStyle.italic,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black.withOpacity(0.15),
-                            offset: const Offset(1, 1),
-                            blurRadius: 2,
+                      style: ReuseText.slogan,
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: ReuseStyles.card(),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            style: ReuseText.body,
+                            cursorColor: ReuseColors.primary,
+                            decoration: ReuseStyles.field(
+                              hintText: 'Email',
+                              prefixIcon: const Icon(Icons.email_outlined,
+                                  color: ReuseColors.muted),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Email tidak boleh kosong';
+                              }
+                              if (!value.contains('@')) {
+                                return 'Masukkan email yang valid';
+                              }
+                              return null;
+                            },
                           ),
+
+                          const SizedBox(height: 18),
+
+                          TextFormField(
+                            controller: _passwordController,
+                            obscureText: true,
+                            style: ReuseText.body,
+                            cursorColor: ReuseColors.primary,
+                            decoration: ReuseStyles.field(
+                              hintText: 'Password',
+                              prefixIcon: const Icon(Icons.lock_outline,
+                                  color: ReuseColors.muted),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Password tidak boleh kosong';
+                              }
+                              return null;
+                            },
+                          ),
+
+                          if (_errorMessage != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 14),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.error_outline,
+                                      size: 18, color: ReuseColors.danger),
+                                  const SizedBox(width: 6),
+                                  Expanded(
+                                    child: Text(
+                                      _errorMessage!,
+                                      style: const TextStyle(
+                                        color: ReuseColors.danger,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                          const SizedBox(height: 24),
+
+                          _isLoading
+                              ? const CircularProgressIndicator(
+                                  color: ReuseColors.primary)
+                              : SizedBox(
+                                  width: double.infinity,
+                                  child: ElevatedButton(
+                                    style: ReuseStyles.primaryButton,
+                                    onPressed: _login,
+                                    child: const Text('Log In'),
+                                  ),
+                                ),
                         ],
                       ),
                     ),
                   ),
 
-                  const SizedBox(height: 36),
-
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          style: TextStyle(color: cream),
-                          cursorColor: cream,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.email, color: cream),
-                            hintText: 'Email',
-                            hintStyle: TextStyle(color: cream.withOpacity(0.7)),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: cream.withOpacity(0.7)),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: cream, width: 2),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.red.shade300, width: 2),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.red.shade700, width: 2),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Email tidak boleh kosong';
-                            }
-                            if (!value.contains('@')) {
-                              return 'Masukkan email yang valid';
-                            }
-                            return null;
-                          },
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        TextFormField(
-                          controller: _passwordController,
-                          obscureText: true,
-                          style: TextStyle(color: cream),
-                          cursorColor: cream,
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.lock, color: cream),
-                            hintText: 'Password',
-                            hintStyle: TextStyle(color: cream.withOpacity(0.7)),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: cream.withOpacity(0.7)),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: cream, width: 2),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.red.shade300, width: 2),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide(color: Colors.red.shade700, width: 2),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Password tidak boleh kosong';
-                            }
-                            return null;
-                          },
-                        ),
-
-                        if (_errorMessage != null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 12),
-                            child: Text(
-                              _errorMessage!,
-                              style: const TextStyle(
-                                color: Colors.redAccent,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-
-                        const SizedBox(height: 30),
-
-                        _isLoading
-                            ? const CircularProgressIndicator(color: cream)
-                            : SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: cream,
-                                    padding: const EdgeInsets.symmetric(vertical: 16),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    elevation: 6,
-                                  ),
-                                  onPressed: _login,
-                                  child: Text(
-                                    'Log In',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: darkBlue,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),

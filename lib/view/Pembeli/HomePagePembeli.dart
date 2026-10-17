@@ -10,6 +10,7 @@ import '/view/Pembeli/HistoryTransaksiPembelianPage.dart';
 import '/view/Pembeli/MerchandiseBlmAmbil.dart';
 import '/view/Pembeli/DaftarBarangPembeli.dart';
 import '/config.dart';
+import '/theme.dart';
 
 class HomePagePembeli extends StatefulWidget {
   final Pembeli pembeli;
@@ -188,60 +189,60 @@ class _HomePagePembeliState extends State<HomePagePembeli> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          backgroundColor: ReuseColors.surface,
+          shape: const RoundedRectangleBorder(borderRadius: ReuseColors.border),
           contentPadding: const EdgeInsets.all(16),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: ReuseColors.borderSmall,
                   child: merch.gambarMerch != null && merch.gambarMerch != ""
                       ? Image.network(
                           "${AppConfig.baseUrl}/storage/merchandise/${merch.gambarMerch}",
                           height: 150,
                           fit: BoxFit.cover,
                           errorBuilder: (c, o, s) => Container(
-                            color: Colors.grey[200],
+                            color: ReuseColors.primarySoft,
                             height: 150,
-                            child: const Icon(Icons.broken_image, size: 40),
+                            child: const Icon(Icons.broken_image,
+                                size: 40, color: ReuseColors.muted),
                           ),
                         )
                       : Container(
-                          color: Colors.grey[100],
+                          color: ReuseColors.primarySoft,
                           height: 150,
-                          child: const Icon(Icons.image, size: 50, color: Colors.grey),
+                          child: const Icon(Icons.image,
+                              size: 50, color: ReuseColors.muted),
                         ),
                 ),
                 const SizedBox(height: 14),
                 Text(
                   merch.namaMerch ?? '-',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                  style: ReuseText.cardTitle.copyWith(fontSize: 17),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
                 Text(
                   "Stok: ${merch.stok ?? 0}",
-                  style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+                  style: ReuseText.label,
                 ),
                 const SizedBox(height: 4),
                 Text(
                   "Rp. ${merch.harga != null ? merch.harga.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.') : '-'}",
-                  style: const TextStyle(fontSize: 16, color: Color(0xFF17616E)),
+                  style: ReuseText.price.copyWith(fontSize: 16),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 if ((merch.stok ?? 0) > 0)
                   ElevatedButton(
+                    style: ReuseStyles.primaryButton,
                     onPressed: () {
                       Navigator.of(context).pop();
                       _showInputJumlahTukar(merch);
                     },
                     child: const Text("Tukar"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF17616E),
-                      foregroundColor: Colors.white, 
-                    ),
                   ),
               ],
             ),
@@ -270,42 +271,43 @@ class _HomePagePembeliState extends State<HomePagePembeli> {
             final merch = showList[index];
             return GestureDetector(
               onTap: () => _showDetailPopup(context, merch),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                elevation: 4,
+              child: Container(
+                clipBehavior: Clip.antiAlias,
+                decoration: ReuseStyles.card(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Expanded(
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                        child: merch.gambarMerch != null && merch.gambarMerch != ""
-                            ? Image.network(
-                                "${AppConfig.baseUrl}/storage/merchandise/${merch.gambarMerch}",
-                                fit: BoxFit.cover,
-                                errorBuilder: (c, o, s) => const Icon(Icons.broken_image, size: 40),
-                              )
-                            : const Icon(Icons.image, size: 50, color: Colors.grey),
-                      ),
+                      child: merch.gambarMerch != null && merch.gambarMerch != ""
+                          ? Image.network(
+                              "${AppConfig.baseUrl}/storage/merchandise/${merch.gambarMerch}",
+                              fit: BoxFit.cover,
+                              errorBuilder: (c, o, s) => const Icon(
+                                  Icons.broken_image,
+                                  size: 40,
+                                  color: ReuseColors.muted),
+                            )
+                          : const Icon(Icons.image,
+                              size: 50, color: ReuseColors.muted),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Column(
                         children: [
                           Text(
                             merch.namaMerch ?? '-',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                            style: ReuseText.cardTitle,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 4),
-                          Text("Stok: ${merch.stok ?? 0}"),
+                          Text("Stok: ${merch.stok ?? 0}",
+                              style: ReuseText.caption),
                           const SizedBox(height: 4),
                           Text(
                             "Rp. ${merch.harga?.toString().replaceAllMapped(RegExp(r'(\d)(?=(\d{3})+(?!\d))'), (m) => '${m[1]}.') ?? '-'}",
-                            style: const TextStyle(color: Color(0xFF17616E)),
+                            style: ReuseText.price,
                           ),
                         ],
                       ),
@@ -323,29 +325,23 @@ class _HomePagePembeliState extends State<HomePagePembeli> {
 
   @override
   Widget build(BuildContext context) {
-    const Color background = Color(0xFFF5E5C7);
-    const Color primary = Color(0xFF17616E);
-    const Color darkText = Color(0xFF31231C);
-
     return Scaffold(
-      backgroundColor: background,
+      backgroundColor: ReuseColors.background,
       appBar: AppBar(
-        backgroundColor: primary,
+        backgroundColor: ReuseColors.primary,
         elevation: 0,
+        scrolledUnderElevation: 0,
         automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/white.png', height: 35),
-          ],
-        ),
         centerTitle: true,
+        title: Image.asset('assets/images/white.png', height: 32),
       ),
       body: FutureBuilder<List<Merchandise>>(
         future: merchandiseFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(color: ReuseColors.primary),
+            );
           }
           if (snapshot.hasError) {
             return const Center(child: Text("Gagal memuat data merchandise."));
@@ -357,79 +353,115 @@ class _HomePagePembeliState extends State<HomePagePembeli> {
 
           // Home tab (0): Welcome, Nama, Judul, lalu 2 katalog
           if (_selectedIndex == 0) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 70),
-                  Center(
-                    child: Text(
-                      "Welcome Back, ${widget.pembeli.namaPembeli}!",
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF17616E),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 220),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.inventory),
-                      label: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16.0),
-                        child: Text(
-                          "Merchandise Belum Diambil",
-                          style: TextStyle(fontSize: 16),
+            return SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 28),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(18),
+                        decoration: ReuseStyles.card(),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 52,
+                              height: 52,
+                              decoration: const BoxDecoration(
+                                color: ReuseColors.primarySoft,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.person,
+                                  color: ReuseColors.primary, size: 30),
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Text(
+                                "Welcome Back, ${widget.pembeli.namaPembeli}!",
+                                style: ReuseText.title.copyWith(fontSize: 19),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MerchandiseBlmAmbil(idPembeli: widget.pembeli.idPembeli),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF17616E),
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        elevation: 3,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      icon: const Icon(Icons.store),
-                      label: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16.0),
-                        child: Text(
-                          "Daftar Barang Dijual",
-                          style: TextStyle(fontSize: 16),
+                      const SizedBox(height: 20),
+                      ReuseCard(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 18, vertical: 18),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MerchandiseBlmAmbil(
+                                  idPembeli: widget.pembeli.idPembeli),
+                            ),
+                          );
+                        },
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 44,
+                              height: 44,
+                              decoration: const BoxDecoration(
+                                color: ReuseColors.primarySoft,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.inventory_2_outlined,
+                                  color: ReuseColors.primary),
+                            ),
+                            const SizedBox(width: 14),
+                            const Expanded(
+                              child: Text(
+                                "Merchandise Belum Diambil",
+                                style: ReuseText.cardTitle,
+                              ),
+                            ),
+                            const Icon(Icons.chevron_right,
+                                color: ReuseColors.muted),
+                          ],
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const DaftarBarangPembeli(),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF17616E),
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        elevation: 3,
+                      const SizedBox(height: 14),
+                      ReuseCard(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 18, vertical: 18),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DaftarBarangPembeli(),
+                            ),
+                          );
+                        },
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 44,
+                              height: 44,
+                              decoration: const BoxDecoration(
+                                color: ReuseColors.accentSoft,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(Icons.storefront_outlined,
+                                  color: ReuseColors.accent),
+                            ),
+                            const SizedBox(width: 14),
+                            const Expanded(
+                              child: Text(
+                                "Daftar Barang Dijual",
+                                style: ReuseText.cardTitle,
+                              ),
+                            ),
+                            const Icon(Icons.chevron_right,
+                                color: ReuseColors.muted),
+                          ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             );
           } else if (_selectedIndex == 1) {
@@ -442,14 +474,9 @@ class _HomePagePembeliState extends State<HomePagePembeli> {
                   child: Center(
                     child: Text(
                       "Katalog Merchandise",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF17616E),
-                      ),
+                      style: ReuseText.display,
                     ),
                   ),
-
                 ),
                 const SizedBox(height: 10),
                 Expanded(child: _buildCatalogGrid(merchList, full: true)),
@@ -461,9 +488,9 @@ class _HomePagePembeliState extends State<HomePagePembeli> {
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: primary,
-        selectedItemColor: background,
-        unselectedItemColor: background.withOpacity(0.5),
+        backgroundColor: ReuseColors.surface,
+        selectedItemColor: ReuseColors.primary,
+        unselectedItemColor: ReuseColors.muted,
         currentIndex: _selectedIndex,
         onTap: _onNavTapped,
         items: const [

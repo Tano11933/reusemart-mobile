@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '/entity/Pemesanan.dart';
 import 'package:http/http.dart' as http;
 import '/config.dart';
+import '/theme.dart';
 
 class DetailPengirimanPage extends StatefulWidget {
   final List<DetailPemesanan> barangList;
@@ -50,7 +51,11 @@ class _DetailPengirimanPageState extends State<DetailPengirimanPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Status Pengantaran", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        const Text("Status Pengantaran",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: ReuseColors.ink)),
         const SizedBox(height: 8),
         Row(
           children: [
@@ -58,16 +63,16 @@ class _DetailPengirimanPageState extends State<DetailPengirimanPage> {
               child: LinearProgressIndicator(
                 value: _isSelesai ? 1.0 : null,
                 minHeight: 8,
-                backgroundColor: Colors.grey[300],
+                backgroundColor: ReuseColors.line,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  _isSelesai ? Colors.green : Colors.orange,
+                  _isSelesai ? ReuseColors.success : ReuseColors.accent,
                 ),
               ),
             ),
             const SizedBox(width: 8),
             Icon(
               _isSelesai ? Icons.check_circle : Icons.delivery_dining,
-              color: _isSelesai ? Colors.green : Colors.orange,
+              color: _isSelesai ? ReuseColors.success : ReuseColors.accent,
               size: 30,
             ),
           ],
@@ -82,12 +87,14 @@ class _DetailPengirimanPageState extends State<DetailPengirimanPage> {
     const baseUrl = AppConfig.baseUrl;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFEBD0),
+      backgroundColor: ReuseColors.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF173B61),
+        backgroundColor: ReuseColors.primary,
+        elevation: 0,
+        scrolledUnderElevation: 0,
         title: const Text('P/M', style: TextStyle(color: Colors.white)),
         centerTitle: true,
-        leading: BackButton(color: Colors.white),
+        leading: const BackButton(color: Colors.white),
         actions: const [
           Icon(Icons.calendar_today, color: Colors.white),
           SizedBox(width: 12),
@@ -102,7 +109,10 @@ class _DetailPengirimanPageState extends State<DetailPengirimanPage> {
             child: Column(
               children: [
                 const Text('Detail Barang',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.teal)),
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: ReuseColors.primary)),
                 const SizedBox(height: 12),
                 buildStatusBar(),
                 const SizedBox(height: 16),
@@ -116,54 +126,59 @@ class _DetailPengirimanPageState extends State<DetailPengirimanPage> {
                           : '/image/${barang.fotoBarang}';
                       final imageUrl = '$baseUrl$fotoPath'; // Menambahkan URL lengkap gambar
 
-                      return Card(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                        elevation: 6,
+                      return ReuseCard(
                         margin: const EdgeInsets.only(bottom: 16),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.network(
-                                  imageUrl,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: ReuseColors.borderSmall,
+                              child: Image.network(
+                                imageUrl,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                                errorBuilder: (_, __, ___) => Container(
                                   width: 100,
                                   height: 100,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+                                  color: ReuseColors.primarySoft,
+                                  child: const Icon(Icons.broken_image,
+                                      color: ReuseColors.muted),
                                 ),
                               ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(barang.namaBarang,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold, fontSize: 18)),
-                                    const SizedBox(height: 8),
-                                    Text("Deskripsi: ${barang.deskripsi}",
-                                        style: TextStyle(color: Colors.black.withOpacity(0.7))),
-                                    Text("Kategori: ${barang.kategori}",
-                                        style: TextStyle(color: Colors.black.withOpacity(0.7))),
-                                    Text("Status Garansi: ${barang.statusGaransi}",
-                                        style: TextStyle(
-                                          color: barang.statusGaransi.toLowerCase().contains("tidak")
-                                              ? Colors.red
-                                              : Colors.green,
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                    const SizedBox(height: 8),
-                                    Text("Harga: Rp ${barang.harga}",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold, fontSize: 16)),
-                                  ],
-                                ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(barang.namaBarang,
+                                      style: ReuseText.cardTitle
+                                          .copyWith(fontSize: 17)),
+                                  const SizedBox(height: 8),
+                                  Text("Deskripsi: ${barang.deskripsi}",
+                                      style: ReuseText.body.copyWith(
+                                          color: ReuseColors.muted)),
+                                  Text("Kategori: ${barang.kategori}",
+                                      style: ReuseText.body.copyWith(
+                                          color: ReuseColors.muted)),
+                                  Text("Status Garansi: ${barang.statusGaransi}",
+                                      style: TextStyle(
+                                        color: barang.statusGaransi
+                                                .toLowerCase()
+                                                .contains("tidak")
+                                            ? ReuseColors.danger
+                                            : ReuseColors.success,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  const SizedBox(height: 8),
+                                  Text("Harga: Rp ${barang.harga}",
+                                      style: ReuseText.price.copyWith(
+                                          fontSize: 16)),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       );
                     },
@@ -175,17 +190,21 @@ class _DetailPengirimanPageState extends State<DetailPengirimanPage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 40),
-              child: ElevatedButton(
-                onPressed: _isLoading || _isSelesai ? null : () => _selesaikanPesanan(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _isLoading || _isSelesai ? null : () => _selesaikanPesanan(context),
+                  style: ReuseStyles.primaryButton,
+                  child: _isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                              strokeWidth: 2, color: ReuseColors.muted),
+                        )
+                      : const Text("Selesaikan Pesanan", style: TextStyle(fontSize: 16)),
                 ),
-                child: _isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text("Selesaikan Pesanan", style: TextStyle(fontSize: 16)),
               ),
             ),
           ),

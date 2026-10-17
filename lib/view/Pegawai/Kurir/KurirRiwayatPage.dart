@@ -4,6 +4,7 @@ import '/entity/Pemesanan.dart';
 import '/client/PemesananClient.dart';
 import '/config.dart';
 import 'package:intl/intl.dart';
+import '/theme.dart';
 
 class KurirRiwayatPage extends StatelessWidget {
   final Pegawai pegawai;
@@ -52,35 +53,25 @@ class KurirRiwayatPage extends StatelessWidget {
             final pemesanan = daftarPemesanan[index];
             final detailList = pemesanan.detail.take(2).toList();
 
-            return Container(
+            return ReuseCard(
               margin: const EdgeInsets.only(bottom: 16),
               padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: const [
-                  BoxShadow(color: Colors.black12, blurRadius: 8),
-                ],
-              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
                     "Riwayat Pengiriman",
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF17616E)),
+                    style: ReuseText.section,
                   ),
                   const SizedBox(height: 12),
                   Text(
                     "ID Pesanan: ${pemesanan.idPemesanan}",
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    style: ReuseText.caption,
                   ),
                   const SizedBox(height: 8),
                   // Format tanggal pesan
                   Text("Tanggal Pesan: ${formatDate(pemesanan.tanggalPesan)}",
-                      style: const TextStyle(fontSize: 14)),
+                      style: ReuseText.body),
                   const SizedBox(height: 12),
                   ...detailList.map((barang) {
                     String baseUrl = AppConfig.baseUrl;
@@ -94,14 +85,19 @@ class KurirRiwayatPage extends StatelessWidget {
                       child: Row(
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: ReuseColors.borderSmall,
                             child: Image.network(
                               fullImageUrl,
                               width: 80,
                               height: 60,
                               fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) =>
-                                  const Icon(Icons.broken_image),
+                              errorBuilder: (_, __, ___) => Container(
+                                width: 80,
+                                height: 60,
+                                color: ReuseColors.primarySoft,
+                                child: const Icon(Icons.broken_image,
+                                    color: ReuseColors.muted),
+                              ),
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -110,13 +106,13 @@ class KurirRiwayatPage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(barang.namaBarang,
-                                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                                    style: ReuseText.cardTitle),
                                 const SizedBox(height: 4),
                                 Text('Harga : Rp ${barang.harga}',
-                                    style: const TextStyle(fontSize: 14)),
+                                    style: ReuseText.caption),
                                 const SizedBox(height: 4),
                                 Text('Kategori: ${barang.kategori}',
-                                    style: const TextStyle(fontSize: 12)),
+                                    style: ReuseText.caption),
                                 const SizedBox(height: 4),
                                 // Format Tanggal Titip dan Tanggal Laku
                                 // Text('Tanggal Titip: ${formatDate(barang.tanggalTitip)}',
