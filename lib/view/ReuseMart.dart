@@ -111,7 +111,7 @@ class _ReuseMartState extends State<ReuseMart> with SingleTickerProviderStateMix
                         const SizedBox(height: 12),
                         // Slogan
                         Text(
-                          'A Second Life for Quality Goods\n— A Better Life for the Planet',
+                          'A Second Life for Quality Goods\nA Better Life for the Planet',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.amber[100],
@@ -120,114 +120,6 @@ class _ReuseMartState extends State<ReuseMart> with SingleTickerProviderStateMix
                           ),
                         ),
                         const SizedBox(height: 24),
-                        // Visi Card
-                        Card(
-                          color: cream,
-                          margin: const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            side: BorderSide(color: lightBlue.withOpacity(0.23), width: 1.5),
-                          ),
-                          elevation: 4,
-                          child: Padding(
-                            padding: const EdgeInsets.all(22),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Visi",
-                                  style: TextStyle(
-                                    color: darkBlue,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 19,
-                                    letterSpacing: 1,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  "Mewujudkan ekosistem barang bekas berkualitas yang mudah diakses masyarakat.",
-                                  style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        // Misi Card
-                        Card(
-                          color: cream,
-                          margin: const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            side: BorderSide(color: lightBlue.withOpacity(0.18), width: 1.5),
-                          ),
-                          elevation: 3,
-                          child: Padding(
-                            padding: const EdgeInsets.all(22),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Misi",
-                                  style: TextStyle(
-                                    color: darkBlue,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 19,
-                                    letterSpacing: 1,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  "• Menghubungkan pembeli & penitip secara transparan\n"
-                                  "• Mendorong budaya daur ulang\n"
-                                  "• Menciptakan transaksi aman & berkelanjutan",
-                                  style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 15,
-                                    height: 1.45,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        // Kontak Card
-                        Card(
-                          color: cream,
-                          margin: const EdgeInsets.symmetric(horizontal: 28, vertical: 8),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            side: BorderSide(color: lightBlue.withOpacity(0.15), width: 1.5),
-                          ),
-                          elevation: 2,
-                          child: Padding(
-                            padding: const EdgeInsets.all(22),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Contact Us",
-                                  style: TextStyle(
-                                    color: lightBlue,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  "reusemart@gmail.com\nJl. Jalan Apa Aja No.04, Yogyakarta\n+62 987 654 321",
-                                  style: TextStyle(
-                                    color: Colors.grey[800],
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
                         const SizedBox(height: 32),
                       ],
                     ),
@@ -780,7 +672,7 @@ class _ReuseMartState extends State<ReuseMart> with SingleTickerProviderStateMix
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 32),
                         child: Text(
-                          'A Second Life for Quality Goods\n— A Better Life for the Planet',
+                          'A Second Life for Quality Goods\nA Better Life for the Planet',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: lightBlue,

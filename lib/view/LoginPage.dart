@@ -247,7 +247,7 @@ class _LoginPageState extends State<LoginPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
-                      'A Second Life for Quality Goods — A Better Life for the Planet',
+                      'A Second Life for Quality Goods, A Better Life for the Planet',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: lightBlue,

@@ -34,6 +34,8 @@ Jalankan backend Laravel di komputer yang sama:
 php artisan serve --host=0.0.0.0 --port=8000
 ```
 
+Akun demo dari seeder backend (kata sandi `password123`): `budi@reusemart.test` (pembeli), `tokolestari@reusemart.test` (penitip), `hunter@reusemart.test` (Hunter), `kurir@reusemart.test` (Kurir). Peran lain (admin, CS, gudang, owner) memakai versi web.
+
 ## Konfigurasi alamat backend
 
 Semua alamat API dan gambar diatur di satu tempat, `lib/config.dart`:
